@@ -13,3 +13,17 @@ Route :: prefix('/')->group(function(){
 Route :: prefix('/admin')->group(function(){
     include "admin/backend.php";
 });
+
+Route :: prefix('/direktur')->group(function(){
+    include "direktur/backend.php";
+});
+
+
+Route :: prefix('/perencanaan')->group(function(){
+    include "perencanaan/backend.php";
+});
+
+
+Route :: prefix('/kasir')->group(function(){
+    include "kasir/backend.php";
+});

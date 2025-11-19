@@ -1,111 +1,91 @@
 <x-backend>
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Persyaratan Pendaftaran Saluran Baru</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Persyaratan yang diperlukan</li>
-                    </ol>
-                </div>
-            </div>
+  {{-- HEADER --}}
+  <section class="content-header">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <h1 class="m-0 fw-bold">Persyaratan Pendaftaran Saluran Baru</h1>
+      <ol class="breadcrumb float-sm-right mb-0">
+        <li class="breadcrumb-item"><a href="{{ url('backend') }}">Home</a></li>
+        <li class="breadcrumb-item active">Persyaratan yang diperlukan</li>
+      </ol>
+    </div>
+  </section>
+
+  {{-- BODY --}}
+  <section class="content">
+    <div class="container-fluid">
+
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+          {{-- Judul seksi + deskripsi singkat --}}
+          <div class="d-flex align-items-center mb-2">
+            <span class="mr-2 text-primary" style="font-size:1.25rem;">
+              <i class="fas fa-paperclip"></i>
+            </span>
+            <h5 class="m-0 text-primary">
+              Persyaratan Lampiran Dokumen Pengajuan PDAM Tirta Pawan
+            </h5>
+          </div>
+          <p class="text-muted mb-4" style="max-width:880px;">
+            Berikut daftar lampiran dokumen yang perlu disiapkan untuk melakukan pengajuan saluran air baru.
+            Pastikan setiap berkas jelas, terbaca, dan sesuai dengan format yang ditentukan.
+          </p>
+
+          {{-- Tabel daftar lampiran --}}
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="bg-primary text-white">
+                <tr>
+                  <th style="width:70px;">No</th>
+                  <th>Nama Dokumen / Lampiran</th>
+                  <th style="width:40%;">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="align-middle">1</td>
+                  <td class="align-middle">Foto KTP (Identitas Pemohon)</td>
+                  <td class="align-middle">Wajib diunggah dalam format <code>JPG</code> atau <code>PNG</code>, ukuran maksimal 2MB.</td>
+                </tr>
+                <tr>
+                  <td class="align-middle">2</td>
+                  <td class="align-middle">Foto Rumah (Tampak Depan)</td>
+                  <td class="align-middle">Menunjukkan lokasi bangunan yang akan dipasang sambungan air. Format <code>JPG/PNG</code>, maks. 2MB.</td>
+                </tr>
+                <tr>
+                  <td class="align-middle">3</td>
+                  <td class="align-middle">Foto KK / Dokumen Pendukung</td>
+                  <td class="align-middle">Opsional. Dapat berupa <code>JPG</code>, <code>PNG</code>, atau <code>PDF</code> (maks. 2MB).</td>
+                </tr>
+                {{-- <tr>
+                  <td class="align-middle">4</td>
+                  <td class="align-middle">Denah Lokasi Rumah / Sketsa</td>
+                  <td class="align-middle">Opsional. Membantu petugas survei menemukan lokasi dengan tepat. Format <code>JPG/PNG/PDF</code>, maks. 2MB.</td>
+                </tr> --}}
+              </tbody>
+            </table>
+          </div>
+
+          {{-- Catatan & tombol --}}
+          <div class="mt-4">
+            <p class="text-muted mb-3">
+              Pastikan semua dokumen di atas telah disiapkan dengan benar sebelum melanjutkan proses pendaftaran.
+              Setelah dokumen lengkap, klik tombol berikut untuk mengisi formulir pengajuan.
+            </p>
+            <a href="{{ url('backend/Pengajuan/create') }}" class="btn btn-primary">
+              <i class="fas fa-file-upload"></i> Ajukan Pendaftaran
+            </a>
+          </div>
+
         </div>
-    </section>
+      </div>
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
+    </div>
+  </section>
 
-                    <!-- Konten utama -->
-                    <div class="card p-3 mb-3">
-                        <!-- Judul -->
-                        <div class="row">
-                            <div class="col-12">
-                                <h4>
-                                    <i class="fas fa-tint"></i>
-                                    Persyaratan Pengajuan Saluran Baru PDAM Tirta Pawan
-                                </h4>
-                                <p class="mt-2">
-                                    Berikut daftar dokumen dan persyaratan yang harus dilengkapi oleh calon pelanggan
-                                    untuk melakukan pendaftaran saluran air baru di PDAM Tirta Pawan.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Tabel Persyaratan -->
-                        <div class="row mt-4">
-                            <div class="col-12 table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama Persyaratan</th>
-                                            <th>Keterangan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Fotokopi KTP Pemohon</td>
-                                            <td>Wajib, masih berlaku</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Fotokopi Kartu Keluarga</td>
-                                            <td>Wajib</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Surat Permohonan Pemasangan Baru</td>
-                                            <td>Ditandatangani pemohon</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Foto Lokasi Rumah / Bangunan</td>
-                                            <td>Menunjukkan titik lokasi pemasangan pipa</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Nomor Telepon yang Aktif</td>
-                                            <td>Untuk dihubungi oleh petugas survei</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Petunjuk tambahan -->
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <p class="text-muted">
-                                    Pastikan seluruh dokumen sudah lengkap dan sesuai. Setelah semua persyaratan
-                                    dipenuhi, silakan klik tombol di bawah ini untuk melanjutkan proses pengajuan.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Tombol aksi -->
-                        <div class="row no-print mt-3">
-                            <div class="col-12">
-                                <a href="{{ url('backend/Pengajuan/create') }}"
-                                    class="btn btn-primary float-right ml-2">
-                                    <i class="fas fa-file-upload"></i> Ajukan Pendaftaran
-                                </a>
-                                <a href="{{ route('Pengajuan.print') }}" target="_blank"
-                                    class="btn btn-default float-right">
-                                    <i class="fas fa-file-alt"></i> Cetak Surat Permohonan
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.card -->
-
-                </div>
-            </div>
-        </div>
-    </section>
+  <style>
+    .table thead th { border: none; }
+    .table tbody tr + tr td { border-top: 1px solid #f0f1f3; }
+    .table-hover tbody tr:hover { background: #f8fbff; }
+  </style>
 </x-backend>

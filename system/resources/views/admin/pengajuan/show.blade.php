@@ -1,147 +1,228 @@
-@php
-    use Illuminate\Support\Str;
-@endphp
-
+{{-- resources/views/admin/pengajuan/show.blade.php --}}
 <x-admin-dashboard>
-
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-2">
-                <i class="fas fa-file-alt me-2"></i> Detail Pengajuan {{ $pengajuan->nama }}
-            </h5>
-
-            <!-- Status -->
-            <div>
-                <span
-                    class="badge 
-                    @if ($pengajuan->status == 'Baru') bg-secondary
-                    @elseif($pengajuan->status == 'Diproses') bg-warning text-dark
-                    @elseif($pengajuan->status == 'Selesai') bg-success
-                    @elseif($pengajuan->status == 'Ditolak') bg-danger
-                    @else bg-light text-dark @endif
-                    px-3 py-2 rounded-pill shadow-sm"
-                    style="font-size: 0.9rem;">
-                    {{ strtoupper($pengajuan->status ?? 'BELUM DITENTUKAN') }}
-                </span>
-            </div>
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div>
+          <h1 class="m-0 text-primary fw-bold">
+            <i class="fas fa-file-alt"></i> Detail Pengajuan
+          </h1>
+          <small class="text-muted">
+            No. Pendaftaran: <span class="text-monospace">{{ $row->no_pendaftaran }}</span>
+          </small>
         </div>
 
-        <div class="card-body">
-            <!-- DATA PRIBADI -->
-            <div class="mb-4">
-                <h6 class="text-primary mb-3">
-                    <i class="fas fa-user me-2"></i> Data Pribadi
-                </h6>
+        <div>
+          <a href="{{ url('admin/pengajuan') }}" class="btn btn-secondary btn-sm mr-1">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </a>
+          <a href="{{ url('admin/pengajuan/'.$row->id.'/edit') }}" class="btn btn-info btn-sm mr-1">
+            <i class="fas fa-edit"></i> Edit
+          </a>
 
-                <div class="row mb-2">
-                    <div class="col-md-6">
-                        <strong>NIK:</strong><br>
-                        <span class="text-muted">{{ $pengajuan->nik }}</span>
-                    </div>
-                    <div class="col-md-6">
-                        <strong>Nama Lengkap:</strong><br>
-                        <span class="text-muted">{{ $pengajuan->nama }}</span>
-                    </div>
-                </div>
+          {{-- Kirim ke Direktur --}}
+          @if($row->status === \App\Models\Pengajuan::ST_SUBMITTED)
+            <form action="{{ url('admin/pengajuan/'.$row->id.'/send-to-director') }}"
+                  method="POST"
+                  class="d-inline">
+              @csrf
+              <button type="submit"
+                      class="btn btn-success btn-sm mr-1"
+                      onclick="return confirm('Kirim pengajuan ini ke Direktur?');">
+                <i class="fas fa-paper-plane"></i> Kirim ke Direktur
+              </button>
+            </form>
 
-                <div class="row mb-2">
-                    <div class="col-md-6">
-                        <strong>Email:</strong><br>
-                        <span class="text-muted">{{ $pengajuan->email }}</span>
-                    </div>
-                    <div class="col-md-6">
-                        <strong>No Handphone:</strong><br>
-                        <span class="text-muted">{{ $pengajuan->no_handphone }}</span>
-                    </div>
-                </div>
+            {{-- Tolak --}}
+            <form action="{{ url('admin/pengajuan/'.$row->id.'/reject') }}"
+                  method="POST"
+                  class="d-inline">
+              @csrf
+              <button type="submit"
+                      class="btn btn-danger btn-sm mr-1"
+                      onclick="return confirm('Yakin ingin MENOLAK pengajuan ini?');">
+                <i class="fas fa-times"></i> Tolak
+              </button>
+            </form>
+          @endif
 
-                <div class="row mb-2">
-                    <div class="col-md-12">
-                        <strong>Alamat:</strong><br>
-                        <span class="text-muted">{{ $pengajuan->alamat }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-
-            <!-- FILE BAGIAN -->
-            <div class="mb-3">
-                <h6 class="text-primary mb-3">
-                    <i class="fas fa-file-upload me-2"></i> Berkas Pengajuan
-                </h6>
-
-                <div class="row g-4">
-                    <!-- KTP -->
-                    <div class="col-md-6">
-                        <div class="border rounded p-3 shadow-sm">
-                            <strong>KTP:</strong><br>
-                            @if ($pengajuan->ktp)
-                                @if (Str::endsWith($pengajuan->ktp, '.pdf'))
-                                    <iframe src="{{ asset($pengajuan->ktp) }}" width="100%" height="400px"
-                                        class="rounded"></iframe>
-                                @else
-                                    <img src="{{ asset($pengajuan->ktp) }}" class="img-fluid rounded shadow-sm mt-2"
-                                        alt="KTP">
-                                @endif
-                            @else
-                                <span class="text-muted">Tidak ada file</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- KK -->
-                    <div class="col-md-6">
-                        <div class="border rounded p-3 shadow-sm">
-                            <strong>KK:</strong><br>
-                            @if ($pengajuan->kk)
-                                @if (Str::endsWith($pengajuan->kk, '.pdf'))
-                                    <iframe src="{{ asset($pengajuan->kk) }}" width="100%" height="400px"
-                                        class="rounded"></iframe>
-                                @else
-                                    <img src="{{ asset($pengajuan->kk) }}" class="img-fluid rounded shadow-sm mt-2"
-                                        alt="KK">
-                                @endif
-                            @else
-                                <span class="text-muted">Tidak ada file</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Surat Permohonan -->
-                    <div class="col-md-6">
-                        <div class="border rounded p-3 shadow-sm">
-                            <strong>Surat Permohonan:</strong><br>
-                            @if ($pengajuan->surat_permohonan)
-                                @if (Str::endsWith($pengajuan->surat_permohonan, '.pdf'))
-                                    <iframe src="{{ asset($pengajuan->surat_permohonan) }}" width="100%"
-                                        height="400px" class="rounded"></iframe>
-                                @else
-                                    <img src="{{ asset($pengajuan->surat_permohonan) }}"
-                                        class="img-fluid rounded shadow-sm mt-2" alt="Surat Permohonan">
-                                @endif
-                            @else
-                                <span class="text-muted">Tidak ada file</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Foto Rumah -->
-                    <div class="col-md-6">
-                        <div class="border rounded p-3 shadow-sm">
-                            <strong>Foto Rumah:</strong><br>
-                            @if ($pengajuan->foto_rumah)
-                                <img src="{{ url("public/$pengajuan->foto_rumah") }}"
-                                    class="img-fluid rounded shadow-sm mt-2" alt="Foto Rumah">
-                            @else
-                                <span class="text-muted">Tidak ada file</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+          {{-- Hapus --}}
+          <form action="{{ url('admin/pengajuan/'.$row->id) }}"
+                method="POST"
+                class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                    class="btn btn-outline-danger btn-sm"
+                    onclick="return confirm('Hapus pengajuan ini?');">
+              <i class="fas fa-trash-alt"></i> Hapus
+            </button>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 
+  <section class="content">
+    <div class="container-fluid">
+
+      @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+      @endif
+      @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+      @endif
+
+      <div class="row">
+        {{-- Identitas & Alamat --}}
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-header">
+              <h3 class="card-title">Data Pemohon</h3>
+            </div>
+            <div class="card-body">
+              <dl class="row mb-0">
+                <dt class="col-sm-4">No. Pendaftaran</dt>
+                <dd class="col-sm-8 text-monospace">{{ $row->no_pendaftaran }}</dd>
+
+                <dt class="col-sm-4">Nama Pemohon</dt>
+                <dd class="col-sm-8">{{ $row->pemohon_nama }}</dd>
+
+                <dt class="col-sm-4">No. Telepon</dt>
+                <dd class="col-sm-8">{{ $row->nomor_telepon }}</dd>
+
+                <dt class="col-sm-4">Pekerjaan</dt>
+                <dd class="col-sm-8">{{ $row->pekerjaan }}</dd>
+
+                <dt class="col-sm-4">Email</dt>
+                <dd class="col-sm-8">{{ $row->email ?: '-' }}</dd>
+
+                <dt class="col-sm-4">Alamat Pemasangan</dt>
+                <dd class="col-sm-8">{{ $row->alamat_pemasangan }}</dd>
+
+                <dt class="col-sm-4">Peruntukan</dt>
+                <dd class="col-sm-8">{{ $row->peruntukan }}</dd>
+
+                <dt class="col-sm-4">Jumlah Kran</dt>
+                <dd class="col-sm-8">{{ $row->jumlah_kran }}</dd>
+
+                <dt class="col-sm-4">Penghuni Tetap</dt>
+                <dd class="col-sm-8">{{ $row->penghuni_tetap }}</dd>
+
+                <dt class="col-sm-4">Penghuni Tidak Tetap</dt>
+                <dd class="col-sm-8">{{ $row->penghuni_tidak_tetap }}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        {{-- Status & Catatan --}}
+        <div class="col-md-6">
+          <div class="card shadow-sm mb-3">
+            <div class="card-header">
+              <h3 class="card-title">Status Pengajuan</h3>
+            </div>
+            <div class="card-body">
+              <p>
+                <strong>Status Persetujuan:</strong>
+                <span class="badge {{ $row->status_badge_class }}">
+                  {{ $row->status_label }}
+                </span>
+              </p>
+              <p>
+                <strong>Progres Pemasangan:</strong>
+                <span class="badge {{ $row->progress_badge_class }}">
+                  {{ $row->progress_label }}
+                </span>
+              </p>
+              <p><strong>Dibuat pada:</strong> {{ $row->created_at?->format('d/m/Y H:i') }}</p>
+              <p><strong>Terakhir diubah:</strong> {{ $row->updated_at?->format('d/m/Y H:i') }}</p>
+              @if($row->approved_at)
+                <p><strong>Disetujui Direktur:</strong> {{ $row->approved_at->format('d/m/Y H:i') }}</p>
+              @endif
+              @if($row->rejected_at)
+                <p><strong>Ditolak Direktur:</strong> {{ $row->rejected_at->format('d/m/Y H:i') }}</p>
+              @endif>
+            </div>
+          </div>
+
+          <div class="card shadow-sm">
+            <div class="card-header">
+              <h3 class="card-title">Catatan</h3>
+            </div>
+            <div class="card-body">
+              <p><strong>Catatan Admin:</strong><br>
+                {!! nl2br(e($row->catatan_admin ?? '-')) !!}
+              </p>
+              <hr>
+              <p><strong>Catatan Direktur:</strong><br>
+                {!! nl2br(e($row->catatan_direktur ?? '-')) !!}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Dokumen lampiran --}}
+      <div class="row mt-3">
+        <div class="col-md-3">
+          <div class="card shadow-sm">
+            <div class="card-header"><strong>KTP</strong></div>
+            <div class="card-body text-center">
+              @if($row->ktp_url)
+                <a href="{{ asset($row->ktp_url) }}" target="_blank">
+                  <img src="{{ asset($row->ktp_url) }}" class="img-fluid mb-2" alt="KTP">
+                </a>
+              @else
+                <span class="text-muted">Tidak ada file</span>
+              @endif
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card shadow-sm">
+            <div class="card-header"><strong>KK</strong></div>
+            <div class="card-body text-center">
+              @if($row->kk_url)
+                <a href="{{ asset($row->kk_url) }}" target="_blank">
+                  <img src="{{ asset($row->kk_url) }}" class="img-fluid mb-2" alt="KK">
+                </a>
+              @else
+                <span class="text-muted">Tidak ada file</span>
+              @endif
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card shadow-sm">
+            <div class="card-header"><strong>Foto Rumah</strong></div>
+            <div class="card-body text-center">
+              @if($row->foto_rumah_url)
+                <a href="{{ asset($row->foto_rumah_url) }}" target="_blank">
+                  <img src="{{ asset($row->foto_rumah_url) }}" class="img-fluid mb-2" alt="Foto Rumah">
+                </a>
+              @else
+                <span class="text-muted">Tidak ada file</span>
+              @endif
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card shadow-sm">
+            <div class="card-header"><strong>Denah</strong></div>
+            <div class="card-body text-center">
+              @if($row->denah_url)
+                <a href="{{ asset($row->denah_url) }}" target="_blank">
+                  <img src="{{ asset($row->denah_url) }}" class="img-fluid mb-2" alt="Denah">
+                </a>
+              @else
+                <span class="text-muted">Tidak ada file</span>
+              @endif
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
 </x-admin-dashboard>
