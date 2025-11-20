@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Direktur\DirekturController;
 use App\Http\Controllers\Direktur\RabApprovalController;
+use App\Http\Controllers\Direktur\SpkController;
 
 // Dashboard Approval (default ke daftar "menunggu")
 Route::get('/', [DirekturController::class, 'index']);
@@ -39,3 +40,14 @@ Route::post('rab/{spko}/approve', [RabApprovalController::class, 'approve'])
 // Reject RAB
 Route::post('rab/{spko}/reject', [RabApprovalController::class, 'reject'])
     ->name('direktur.rab.reject');
+
+// =================== MANAGEMENT SPK =================== //
+Route::get('spk',                [SpkController::class, 'index']);
+Route::get('spk/{id}',           [SpkController::class, 'show']);
+
+// Route khusus preview surat (menggunakan view print admin, tapi tanpa perintah print)
+Route::get('spk/{id}/preview',   [SpkController::class, 'preview'])->name('direktur.spk.preview');
+
+// Route Aksi Approval
+Route::post('spk/{id}/approve',  [SpkController::class, 'approve'])->name('direktur.spk.approve');
+Route::post('spk/{id}/reject',   [SpkController::class, 'reject'])->name('direktur.spk.reject');

@@ -22,12 +22,17 @@ class SpkHeader extends Model
         'status',
         'dibuat_at',
         'disetujui_at',
+
+        // === TAMBAHKAN DUA BARIS INI ===
+        'tgl_jadwal',    // <--- Agar tanggal tersimpan
+        'status_teknis', // <--- Agar status berubah jadi 'scheduled'
     ];
 
     protected $casts = [
         'rab_id'       => 'integer',
         'dibuat_at'    => 'datetime',
         'disetujui_at' => 'datetime',
+        'tgl_jadwal'   => 'datetime', // Tambahkan casting ini juga agar format tanggal aman
     ];
 
     /* ================= RELASI ================= */
@@ -125,5 +130,29 @@ class SpkHeader extends Model
 
         $this->status = 'selesai';
         $this->save();
+    }
+
+    // ... (kode sebelumnya) ...
+
+    // === TAMBAHAN RELASI TRANDIS ===
+    public function logs()
+    {
+        return $this->hasMany(SpkLog::class, 'spk_header_id');
+    }
+
+    public function fotos()
+    {
+        return $this->hasMany(SpkFoto::class, 'spk_header_id');
+    }
+
+    // Cek apakah timer sedang jalan?
+    public function getIsWorkingAttribute()
+    {
+        return $this->logs()->whereNull('selesai_pada')->exists();
+    }
+
+    public function getActiveLogAttribute()
+    {
+        return $this->logs()->whereNull('selesai_pada')->latest()->first();
     }
 }

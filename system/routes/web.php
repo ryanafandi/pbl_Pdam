@@ -27,3 +27,7 @@ Route :: prefix('/perencanaan')->group(function(){
 Route :: prefix('/kasir')->group(function(){
     include "kasir/backend.php";
 });
+
+Route :: prefix('/trandis')->group(function(){
+    include "trandis/backend.php";
+});

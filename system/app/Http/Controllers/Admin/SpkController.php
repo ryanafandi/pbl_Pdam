@@ -182,4 +182,22 @@ class SpkController extends Controller
 
         return back()->with('success', 'SPK ditandai selesai pemasangan.');
     }
+
+    /**
+     * Cetak SPK (Admin / Trandis)
+     */
+    public function print($id)
+    {
+        $row = SpkHeader::with(['rab.spko.pengajuan'])->findOrFail($id);
+
+        // Opsional: Cek apakah sudah disetujui direktur sebelum print
+        // if ($row->status !== 'disetujui' && $row->status !== 'selesai') {
+        //     return back()->with('error', 'SPK belum disetujui Direktur.');
+        // }
+
+        // Kirim parameter 'print' agar otomatis window.print() aktif
+        request()->merge(['print' => true]);
+
+        return view('admin.spk.print', compact('row'));
+    }
 }

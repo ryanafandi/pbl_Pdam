@@ -226,4 +226,6 @@ class RabHeader extends Model
     {
         return $this->hasOne(SpkHeader::class, 'rab_id', 'id');
     }
+
+    
 }

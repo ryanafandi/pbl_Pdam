@@ -114,3 +114,6 @@ Route::prefix('spk')->name('admin.spk.')->group(function () {
         ->whereNumber('id')
         ->name('selesai');
 });
+
+Route::get('spk/{id}/print', [SpkController::class, 'print'])->name('admin.spk.print');
+Route::post('spk/{id}/send', [SpkController::class, 'sendToDirector'])->name('admin.spk.send');
